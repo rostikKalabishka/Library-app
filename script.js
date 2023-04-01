@@ -10,7 +10,7 @@ const btnClose = document.querySelector(".close_modal_window");
 
 const modelCard = document.querySelector(".modal-card");
 
-const libraryArr = [];
+let libraryArr = [];
 
 const createText = (id, className, text1 = "test") => {
   let text = document.createElement("h3");
@@ -28,11 +28,12 @@ const createInput = (id, className, type) => {
   return input;
 };
 
-const createButton = (id, className, text = "test") => {
+const createButton = (id, className, text = "test", dataset) => {
   let button = document.createElement("button");
   button.innerText = text;
   button.setAttribute("id", id);
   button.setAttribute("class", className);
+  button.dataset.index = dataset;
   return button;
 };
 
@@ -99,11 +100,14 @@ const createBooks = () => {
   let author = document.getElementById("name-author-id");
   let year = document.getElementById("year-id");
   let pages = document.getElementById("pages-number-id");
+  let randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+  let uniqid = randLetter + Date.now();
   const newBook = {
     title: name.value.trim(),
     author: author.value.trim(),
     year: year.value.trim(),
     pages: pages.value.trim(),
+    index: uniqid,
   };
   // newBook.title = nameBook.value.trim();
   // newBook.author = nameAuthor.value.trim();
@@ -187,13 +191,9 @@ const renderAddBook = () => {
   });
 };
 
-// const deleteCard = document.getElementById("delete-btn-id");
-// deleteCard.onclick = (element) =>{
-//   element.parentElement.parentElement.remove();
-// }
-
 const renderCard = (obj) => {
   const info = bookInfo.appendChild(createDiv("info-div-id", "info-div"));
+
   info.appendChild(createText("book-title", "title", obj.title));
 
   info.appendChild(createText("name-book", "book", obj.author));
@@ -201,22 +201,44 @@ const renderCard = (obj) => {
   info.appendChild(createText("pages-id", "pages", obj.pages));
 
   info.appendChild(createText("year-id", "year-book", obj.year));
-
+  obj.index;
   info.appendChild(createButton("read-btn-id", "read-btn", "Read"));
   info.appendChild(createButton("drop-btn-id", "drop-btn", "Drop"));
-  info.appendChild(createButton("delete-btn-id", "delete-btn", "Delete"));
+
+  const deleteBtn = createButton(
+    "delete-btn-id",
+    "delete-btn",
+    "Delete",
+    obj.index
+  );
+
+  console.log(obj);
+  // const infoDiv = document.getElementById("info-div-id");
+
+  deleteBtn.addEventListener("click", (e) => {
+    console.log(e.target.dataset.index);
+    // console.log(
+    //   libraryArr.filter((item) => item.index !== e.target.dataset.index)
+    // );
+    libraryArr = libraryArr.filter(
+      (item) => item.index !== e.target.dataset.index
+    );
+    render();
+  });
+  info.appendChild(deleteBtn);
+  // console.log(libraryArr.filter((item) => item.index !== obj.index));
+
+  // console.log(libraryArr);
+  // filter
 };
-
-const deleteCard = document.querySelector(".delete-btn");
-
-// deleteCard.addEventListener("click", () => {
-//   parentElement.parentElement.remove()
-// });
 
 const render = () => {
   bookInfo.innerHTML = " ";
 
   renderAddBook();
   libraryArr.forEach((book) => renderCard(book));
+  console.log(libraryArr);
 };
 render();
+
+// console.log(libraryArr);
