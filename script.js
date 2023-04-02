@@ -12,6 +12,11 @@ const modelCard = document.querySelector(".modal-card");
 
 let libraryArr = [];
 
+const bookLocal = () => {
+  localStorage.setItem("book", JSON.stringify(libraryArr));
+};
+
+// console.log(bookLocal);
 const createText = (id, className, text1 = "test") => {
   let text = document.createElement("h3");
   text.innerText = text1;
@@ -28,11 +33,12 @@ const createInput = (id, className, type) => {
   return input;
 };
 
-const createButton = (id, className, text = "test", dataset) => {
+const createButton = (id, className, text = "test", status, dataset) => {
   let button = document.createElement("button");
   button.innerText = text;
   button.setAttribute("id", id);
   button.setAttribute("class", className);
+  button.dataset.status = status;
   button.dataset.index = dataset;
   return button;
 };
@@ -95,6 +101,10 @@ const onClickModal = () => {
   };
 };
 
+const getBookLocal = () => {
+  libraryArr = JSON.parse(localStorage.getItem("book") || "[]");
+};
+
 const createBooks = () => {
   let name = document.getElementById("name-book-id");
   let author = document.getElementById("name-author-id");
@@ -102,26 +112,20 @@ const createBooks = () => {
   let pages = document.getElementById("pages-number-id");
   let randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
   let uniqid = randLetter + Date.now();
+  let status = false;
   const newBook = {
     title: name.value.trim(),
     author: author.value.trim(),
     year: year.value.trim(),
     pages: pages.value.trim(),
     index: uniqid,
+    status: status,
   };
-  // newBook.title = nameBook.value.trim();
-  // newBook.author = nameAuthor.value.trim();
-  // newBook.year = yearBook.value.trim();
-  // newBook.pages = pagesNumber.value.trim();
 
   libraryArr.push(newBook);
   render();
 
   modal.style.display = "none";
-
-  // return { title, author, year, pages };
-
-  console.log(libraryArr);
 };
 
 const renderAddBook = () => {
@@ -201,44 +205,91 @@ const renderCard = (obj) => {
   info.appendChild(createText("pages-id", "pages", obj.pages));
 
   info.appendChild(createText("year-id", "year-book", obj.year));
-  obj.index;
-  info.appendChild(createButton("read-btn-id", "read-btn", "Read"));
-  info.appendChild(createButton("drop-btn-id", "drop-btn", "Drop"));
 
   const deleteBtn = createButton(
     "delete-btn-id",
     "delete-btn",
     "Delete",
+    obj.status,
     obj.index
   );
 
-  console.log(obj);
-  // const infoDiv = document.getElementById("info-div-id");
+  const readBtn = createButton(
+    "read-btn-id",
+    "read-btn",
+    "Read",
+    obj.status,
+    obj.index
+  );
+  const dropBtn = createButton(
+    "drop-btn-id",
+    "drop-btn",
+    "Drop",
+    obj.status,
+    obj.index
+  );
 
-  deleteBtn.addEventListener("click", (e) => {
-    console.log(e.target.dataset.index);
-    // console.log(
-    //   libraryArr.filter((item) => item.index !== e.target.dataset.index)
+  readBtn.addEventListener("click", () => {
+    const readBtn = document.getElementById("read-btn-id");
+    const dropBtn = document.getElementById("drop-btn-id");
+
+    // const status = obj.greenBtn;
+    // if (
+    //   readBtn.classList.contains("greenBtn") ||
+    //   dropBtn.classList.contains("redBtn")
+    // ) {
+    //   dropBtn.classList.remove("redBtn");
+    //   readBtn.classList.remove("greenBtn");
+    // } else {
+    //   readBtn.classList.add("greenBtn");
+    // }
+
+    // libraryArr = libraryArr.map((item) =>
+    //   item.index === obj.index ? { ...item, status: true } : item
     // );
-    libraryArr = libraryArr.filter(
-      (item) => item.index !== e.target.dataset.index
+
+    // render();
+  });
+
+  dropBtn.addEventListener("click", (e) => {
+    const dropBtn = document.getElementById("drop-btn-id");
+    const readBtn = document.getElementById("read-btn-id");
+
+    console.log(obj.status);
+    obj.status = true;
+    // if (
+    //   readBtn.classList.contains("greenBtn") ||
+    //   dropBtn.classList.contains("redBtn")
+    // ) {
+    //   dropBtn.classList.remove("redBtn");
+    //   readBtn.classList.remove("greenBtn");
+    // } else {
+    //   dropBtn.classList.add("redBtn");
+    // }
+
+    libraryArr = libraryArr.map((item) =>
+      item.index === obj.index ? { ...item, status: true } : item
     );
+
     render();
   });
+
+  deleteBtn.addEventListener("click", () => {
+    libraryArr = libraryArr.filter((item) => item.index !== obj.index);
+    render();
+  });
+
+  info.appendChild(readBtn);
+  info.appendChild(dropBtn);
   info.appendChild(deleteBtn);
-  // console.log(libraryArr.filter((item) => item.index !== obj.index));
-
-  // console.log(libraryArr);
-  // filter
 };
-
+getBookLocal();
 const render = () => {
   bookInfo.innerHTML = " ";
-
+  // bookLocal();
   renderAddBook();
   libraryArr.forEach((book) => renderCard(book));
   console.log(libraryArr);
+  bookLocal();
 };
 render();
-
-// console.log(libraryArr);

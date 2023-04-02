@@ -205,6 +205,7 @@ ul li {
   color: aliceblue;
   background-color: rgb(143, 141, 141);
 }
+
 .drop-btn:hover,
 .read-btn:hover,
 .delete-btn:hover {
@@ -212,4 +213,17 @@ ul li {
   background-color: rgb(66, 62, 62);
   transition: 0.5s ease-in-out;
   cursor: pointer;
+}
+
+.greenBtn {
+  background-color: rgb(7, 189, 7);
+}
+.redBtn {
+  background-color: red;
+}
+.greenBtn:hover {
+  background-color: rgb(1, 126, 1);
+}
+.redBtn:hover {
+  background-color: rgb(189, 9, 9);
 }
