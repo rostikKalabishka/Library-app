@@ -16,7 +16,6 @@ const bookLocal = () => {
   localStorage.setItem("book", JSON.stringify(libraryArr));
 };
 
-// console.log(bookLocal);
 const createText = (id, className, text1 = "test") => {
   let text = document.createElement("h3");
   text.innerText = text1;
