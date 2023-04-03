@@ -110,6 +110,17 @@ const createBooks = () => {
   let author = document.getElementById("name-author-id");
   let year = document.getElementById("year-id");
   let pages = document.getElementById("pages-number-id");
+
+  if (
+    name.value.trim().length === 0 ||
+    author.value.trim().length === 0 ||
+    year.value.trim().length === 0 ||
+    pages.value.trim().length === 0
+  ) {
+    alert("Please fill out all the fields.");
+    return;
+  }
+
   let randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
   let uniqid = randLetter + Date.now();
   let status = false;
