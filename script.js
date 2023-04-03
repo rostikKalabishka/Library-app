@@ -100,7 +100,7 @@ const onClickModal = () => {
     }
   };
 };
-
+//local storage
 const getBookLocal = () => {
   libraryArr = JSON.parse(localStorage.getItem("book") || "[]");
 };
@@ -221,54 +221,14 @@ const renderCard = (obj) => {
     obj.status,
     obj.index
   );
-  const dropBtn = createButton(
-    "drop-btn-id",
-    "drop-btn",
-    "Drop",
-    obj.status,
-    obj.index
-  );
+
+  if (obj.status) {
+    readBtn.classList.add("greenBtn");
+  }
 
   readBtn.addEventListener("click", () => {
-    const readBtn = document.getElementById("read-btn-id");
-    const dropBtn = document.getElementById("drop-btn-id");
-
-    // const status = obj.greenBtn;
-    // if (
-    //   readBtn.classList.contains("greenBtn") ||
-    //   dropBtn.classList.contains("redBtn")
-    // ) {
-    //   dropBtn.classList.remove("redBtn");
-    //   readBtn.classList.remove("greenBtn");
-    // } else {
-    //   readBtn.classList.add("greenBtn");
-    // }
-
-    // libraryArr = libraryArr.map((item) =>
-    //   item.index === obj.index ? { ...item, status: true } : item
-    // );
-
-    // render();
-  });
-
-  dropBtn.addEventListener("click", (e) => {
-    const dropBtn = document.getElementById("drop-btn-id");
-    const readBtn = document.getElementById("read-btn-id");
-
-    console.log(obj.status);
-    obj.status = true;
-    // if (
-    //   readBtn.classList.contains("greenBtn") ||
-    //   dropBtn.classList.contains("redBtn")
-    // ) {
-    //   dropBtn.classList.remove("redBtn");
-    //   readBtn.classList.remove("greenBtn");
-    // } else {
-    //   dropBtn.classList.add("redBtn");
-    // }
-
     libraryArr = libraryArr.map((item) =>
-      item.index === obj.index ? { ...item, status: true } : item
+      item.index === obj.index ? { ...item, status: !item.status } : item
     );
 
     render();
@@ -280,16 +240,18 @@ const renderCard = (obj) => {
   });
 
   info.appendChild(readBtn);
-  info.appendChild(dropBtn);
+
   info.appendChild(deleteBtn);
 };
+
 getBookLocal();
 const render = () => {
   bookInfo.innerHTML = " ";
-  // bookLocal();
+
   renderAddBook();
   libraryArr.forEach((book) => renderCard(book));
-  console.log(libraryArr);
+
   bookLocal();
 };
+
 render();
