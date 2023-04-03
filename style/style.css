@@ -25,9 +25,10 @@ header:hover {
 }
 .logo {
   font-size: 40px;
-  width: 25px;
+  width: 45px;
 }
 .logo-text {
+  font-size: 50px;
   margin-left: 10px;
   display: inline-block;
 }
